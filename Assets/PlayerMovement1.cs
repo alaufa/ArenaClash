@@ -14,9 +14,9 @@ public class PlayerMovement2 : MonoBehaviour {
     
     // Update is called once per frame
     void Update () {
-        horizontalMove = Input.GetAxisRaw("Horizontal2") * runSpeed;
+        horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump2"))
         {
             jump = true;
             Debug.Log("Jump button pressed");

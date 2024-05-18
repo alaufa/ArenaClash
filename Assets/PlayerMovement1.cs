@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMovement2 : MonoBehaviour {
 
     public CharacterController2D controller;
+    public Animator animator;
 
     public float runSpeed = 40f;
 
@@ -15,6 +16,8 @@ public class PlayerMovement2 : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+
+        animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
         if (Input.GetButtonDown("Jump2"))
         {

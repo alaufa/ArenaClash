@@ -6,17 +6,18 @@ public class PlayerMovement2 : MonoBehaviour {
 
     public CharacterController2D controller;
     public Animator animator;
+    public GameObject attackHitbox; // Reference to the attack hitbox GameObject
 
     public float runSpeed = 40f;
 
     float horizontalMove = 0f;
     bool jump = false;
     bool crouch = false;
+    bool attack = false;
+    bool jumpAttack = false;
 
-    // To keep track of facing direction
     private bool facingRight = true;
 
-    // Update is called once per frame
     void Update () {
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
@@ -35,20 +36,40 @@ public class PlayerMovement2 : MonoBehaviour {
         {
             crouch = false;
         }
+
+        // if (Input.GetButtonDown("Fire1"))
+        // {
+        //     attack = true;
+        //     animator.SetTrigger("Attack");
+        // }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            if (animator.GetBool("IsJumping"))
+            {
+                jumpAttack = true;
+                animator.SetTrigger("JumpAttackTrigger");
+                animator.SetBool("IsJumping", false);
+    
+            }
+            else
+            {
+                attack = true;
+                animator.SetTrigger("Attack");
+            }
+        }
     }
+
     public void OnLanding ()
     {
         animator.SetBool("IsJumping", false);
     }
 
-
     void FixedUpdate ()
     {
-        // Move our character
         controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
         jump = false;
 
-        // Flip the character if needed
         Flip(horizontalMove);
     }
 
@@ -56,19 +77,28 @@ public class PlayerMovement2 : MonoBehaviour {
     {
         if (moveDirection > 0 && !facingRight)
         {
-            // Right direction and currently facing left, flip the character
             facingRight = true;
             Vector3 theScale = transform.localScale;
-            theScale.x = Mathf.Abs(theScale.x); // Ensure x is positive
+            theScale.x = Mathf.Abs(theScale.x);
             transform.localScale = theScale;
         }
         else if (moveDirection < 0 && facingRight)
         {
-            // Left direction and currently facing right, flip the character
             facingRight = false;
             Vector3 theScale = transform.localScale;
-            theScale.x = -Mathf.Abs(theScale.x); // Ensure x is negative
+            theScale.x = -Mathf.Abs(theScale.x);
             transform.localScale = theScale;
         }
+    }
+
+    // Animation event methods
+    public void EnableHitbox()
+    {
+        attackHitbox.SetActive(true);
+    }
+
+    public void DisableHitbox()
+    {
+        attackHitbox.SetActive(false);
     }
 }

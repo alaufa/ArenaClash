@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour {
     float horizontalMove = 0f;
     bool jump = false;  // Changed from true to false
     bool crouch = false;
+    bool attack = false;
+    bool jumpAttack = false;
     
     // Update is called once per frame
     void Update () {
@@ -30,6 +32,21 @@ public class PlayerMovement : MonoBehaviour {
         } else if (Input.GetButtonUp("Crouch"))
         {
             crouch = false;
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            if (animator.GetBool("IsJumping"))
+            {
+                jumpAttack = true;
+                animator.SetTrigger("JumpAttackTrigger");
+                animator.SetBool("IsJumping", false);
+    
+            }
+            else
+            {
+                attack = true;
+                animator.SetTrigger("Attack");
+            }
         }
     }
 
